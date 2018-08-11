@@ -1,0 +1,75 @@
+import discord
+import json
+import os
+from discord.ext import commands
+import asyncio
+from itertools import cycle
+from random import randint
+import math
+#import request
+
+Client = discord.Client()
+client = commands.Bot(command_prefix = "!")
+client.remove_command('help')
+status = ['at the Game Place']
+
+async def change_status():
+    await client.wait_until_ready()
+    msgs = cycle(status)
+
+    while not client.is_closed:
+        current_status = next(msgs)
+        await client.change_presence(game=discord.Game(name=current_status))
+        await asyncio.sleep(60)
+
+@client.event
+async def on_ready():
+    print('BOT IS ONLINE')
+
+@client.command(pass_context=True)
+async def help(ctx):
+    author = ctx.message.author
+
+    embed = discord.Embed(
+        colour = discord.Colour.orange()
+    )
+    embed.set_author(name='!help')
+    embed.add_field(name='!cwcpic', value='Posts a random picture of out lord in the chat.', inline=False)
+    embed.add_field(name='!cwcnsfw', value='Post a random lewd picture of our lord in chat.', inline=False)
+    embed.add_field(name='!cwcresources', value='Sends you a list of ways to experinces out lord.', inline=False)
+
+    await client.send_message(author, embed=embed)
+
+@client.command(pass_context=True)
+async def cwcpic(ctx):
+    channel = ctx.message.channel
+    a = randint(1,20)
+    await client.send_file(channel, r'C:\Users\Alex_2\PythonPrograms\Zim Bot\chris chan photos\{}.png'.format(a))
+
+@client.command(pass_context=True)
+async def cwcnsfw(ctx):
+    channel = ctx.message.channel
+    a = randint(1,1)
+    await client.send_file(channel, r'C:\Users\Alex_2\PythonPrograms\Zim Bot\nsfw chris chan photos\{}.png'.format(a))
+
+@client.command(pass_context=True)
+async def cwcresources(ctx):
+    author = ctx.message.author
+
+    embed = discord.Embed(
+        colour = discord.Colour.red()
+    )
+
+    embed.set_author(name='Resources')
+    embed.add_field(name='Documentary', value='https://www.youtube.com/channel/UCO9MEgyxHmXmJXDYCj7W4cA', inline=False)
+    embed.add_field(name='CWCKI', value='https://sonichu.com/cwcki/Main_Page', inline=False)
+    embed.add_field(name='Chris-chans Twitter', value='https://twitter.com/CWCSonichu', inline=False)
+    embed.add_field(name='Chris-chans Facebook', value='https://www.facebook.com/CwcvilleGuardian', inline=False)
+
+    await client.send_message(author, embed=embed)
+
+
+    
+
+client.loop.create_task(change_status())
+client.run('NDc3NjU4NzU3Nzk5NzM5NDIy.Dk_WDQ._oJRpijD8tRuPxvVIWgiZTuuBP0')
